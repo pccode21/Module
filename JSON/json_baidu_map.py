@@ -16,7 +16,7 @@ def baidu_map_search(key):
         "output": "json",
         "ak": AK,
         "page_size": 20,
-        "page_num": 7,
+        "page_num": 0,  # 从第一页 0 开始
         "scope": 2}
     response = requests.get(url, params)
     result = response.json()
@@ -41,8 +41,9 @@ def baidu_map_search(key):
             "lat,lng": (eval(lat), eval(lng)),  # Python的内置函数eval()可以去掉字符串两端的引号
             "tag": i.get("detail_info", "").get("tag", "")}
         new_data.append(item)
-        with codecs.open('search_result.json', 'a', encoding='utf-8') as f:
-            f.write(json.dumps(new_data, ensure_ascii=False))
+        # 用codecs提供的open方法来指定打开的文件的语言编码，它会在读取的时候自动转换为内部unicode
+        with codecs.open('search_result.json', 'w', encoding='utf-8') as f:
+            f.write(json.dumps(new_data, ensure_ascii=False))  # 由于new_data里面包含有汉字，需要使用ensure_ascii=False
         for k, v in item.items():
             print("{}:{}".format(k, v))
 
