@@ -1,7 +1,7 @@
 import requests
 import json
 import os
-import codecs
+import codecs  # 自然语言编码转换模块
 
 os.chdir(r'.\Module\JSON\data')  # 创建工作路径
 
