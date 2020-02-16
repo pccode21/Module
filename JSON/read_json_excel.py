@@ -15,8 +15,8 @@ def read_json(json_file):
     print(data)
     df = pd.DataFrame()  # 创建基本数据帧是空数据帧
     j = 0
-    for line2 in data:  # 由于data是列表字典[{}, {}]，需要先取出列表中的各个字典
-        for i in line2:  # 再从字典中取出各项值
+    for line in data:  # 由于data是列表字典[{}, {}]，需要先取出列表中的各个字典
+        for i in line:  # 再从字典中取出各项值
             j += 1
             df1 = pd.DataFrame([i], index=[j])  # 在数据帧中自动添加索引
             df = df.append(df1)
