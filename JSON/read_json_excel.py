@@ -22,7 +22,8 @@ def read_json(json_file):
             df = df.append(df1)
     # 在excel表格的第1列写入, 不写入index
     print(df)
-    df.to_excel('json_excel.xlsx', sheet_name='json_data', startcol=0, index=False)  # index=False表示在excel表中不显示索引值
+    # df.to_excel('json_excel.xlsx', sheet_name='json_data', startcol=0, index=False)  # index=False表示在excel表中不显示索引值
+    df.to_csv('json_csv.csv', mode='a', header=False, index=None)  # mode='a'表示可以追加写入
 
 
 if __name__ == '__main__':

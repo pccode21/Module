@@ -49,4 +49,4 @@ def baidu_map_search(key):
 
 
 if __name__ == '__main__':
-    baidu_map_search("学校")
+    baidu_map_search("美食")
