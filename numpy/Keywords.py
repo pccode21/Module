@@ -8,6 +8,8 @@ b1 = np.sort(b)  # 默认将数组b按行排序
 b2 = np.sort(b, axis=None)  # axis=None表示将数组展平，并排序
 b3 = np.sort(b, axis=0)  # 将数组b按列排序
 b4 = b.flatten()  # 将数组b展平，flatten()是一个展开性质的函数，将多维的数组进行展开成1行的一维数组
+b5 = ['saw', 'small', 'He', 'foxes', 'six']
+b5.sort(key=len)  # 二级排序key，可以用这个key进行排序，按长度对字符串进行排序
 c = np.zeros((3, 4))  # 数据全为0，3行4列的数组
 d = np.ones((3, 4), dtype=np.float)  # 数据全为1，3行4列的数组
 e = np.arange(10, 20, 2)  # 用 arange 创建连续数组:10-19 的数据，2步长
@@ -33,6 +35,7 @@ print(b1)
 print(b2)
 print(b3)
 print(b4)
+print(b5)
 print(b.ndim)  # 输出数组的维度
 print(b.size)  # 输出数组的元素个数
 print(type(list(a)))
@@ -102,6 +105,7 @@ max= [ 3  7 11]
 [[4 1 2]
  [5 2 3]]
 [4 2 3 5 1 2]
+['He', 'saw', 'six', 'small', 'foxes']
 2
 6
 <class 'list'>
