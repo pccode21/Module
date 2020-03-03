@@ -113,13 +113,20 @@ def geo_lines() -> Geo:
         .add_schema(maptype="china")
         .add(
             "",
-            [("广州", 55), ("北京", 66), ("杭州", 77), ("重庆", 88)],
+            [("北京", 1), ("重庆", 2), ("长沙", 3), ("长春", 4), ("成都", 5), ("大连", 6), ("广州", 7), ("贵阳", 8),
+            ("合肥", 9), ("杭州", 10), ("哈尔滨", 11), ("海口", 12), ("济南", 13), ("昆明", 14), ("柳州", 15), ("绵阳", 16),
+            ("潞西市", 17), ("南宁", 18), ("南京", 19), ("沈阳", 20), ("三亚", 21), ("上海", 22), ("天津", 23), ("徐州", 24),
+            ("义乌", 25), ("郑州", 26), ("张家界", 27)],
             type_=ChartType.EFFECT_SCATTER,
-            color="#ffa022",
+            color="#ffa022"
         )
         .add(
-            "geo",
-            [("广州", "上海"), ("广州", "北京"), ("广州", "杭州"), ("广州", "重庆"), ("广州", "揭阳")],
+            "",
+            [("揭阳", "北京"), ("揭阳", "重庆"), ("揭阳", "长沙"), ("揭阳", "长春"), ("揭阳", "成都"),
+            ("揭阳", "大连"), ("揭阳", "广州"), ("揭阳", "贵阳"), ("揭阳", "合肥"), ("揭阳", "杭州"),
+            ("揭阳", "哈尔滨"), ("揭阳", "海口"), ("揭阳", "济南"), ("揭阳", "昆明"), ("揭阳", "柳州"),
+            ("揭阳", "绵阳"), ("揭阳", "潞西市"), ("揭阳", "南宁"), ("揭阳", "南京"), ("揭阳", "沈阳"),("揭阳", "三亚"),
+            ("揭阳", "上海"), ("揭阳", "天津"), ("揭阳", "徐州"),("揭阳", "义乌"),("揭阳", "郑州"), ("揭阳", "张家界")],
             type_=ChartType.LINES,
             effect_opts=opts.EffectOpts(
                 symbol=symbol_list[0], symbol_size=15, color='#a6c84c', period=6, trail_length=0, is_show=True
@@ -128,8 +135,10 @@ def geo_lines() -> Geo:
             linestyle_opts=opts.LineStyleOpts(curve=0.2, color='#46bee9', width=1, opacity=0.5),
         )
         .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
-        .set_global_opts(title_opts=opts.TitleOpts(title="Geo-Lines"))
-    )
+        .set_global_opts(title_opts=opts.TitleOpts(title="揭阳出发国内航线", subtitle="数能工作室制作", pos_left="center",
+                        title_textstyle_opts=opts.TextStyleOpts(color='black',font_size=20, font_weight="bold"),
+                        subtitle_textstyle_opts=opts.TextStyleOpts(color='black',font_size=15),item_gap=15))
+        )
     return c
 
 
