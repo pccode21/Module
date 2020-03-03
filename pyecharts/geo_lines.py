@@ -119,7 +119,7 @@ def geo_lines() -> Geo:
         )
         .add(
             "geo",
-            [("广州", "上海"), ("广州", "北京"), ("广州", "杭州"), ("广州", "重庆")],
+            [("广州", "上海"), ("广州", "北京"), ("广州", "杭州"), ("广州", "重庆"), ("广州", "揭阳")],
             type_=ChartType.LINES,
             effect_opts=opts.EffectOpts(
                 symbol=symbol_list[0], symbol_size=15, color='#a6c84c', period=6, trail_length=0, is_show=True
