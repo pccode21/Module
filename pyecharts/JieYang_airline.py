@@ -1,12 +1,9 @@
 from pyecharts import options as opts
-from pyecharts.charts import Geo, Page
-from pyecharts.faker import Collector, Faker
+from pyecharts.charts import Geo
 from pyecharts.globals import ChartType, SymbolType
 import os
 
 os.chdir(r'.\Module\pyecharts')  # 创建工作路径
-
-C = Collector()
 
 symbol_dict = {
                 'airplane': 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z',
@@ -20,106 +17,18 @@ symbol_dict = {
                 'run': 'path://M13.676,32.955c0.919-0.031,1.843-0.008,2.767-0.008v0.007c0.827,0,1.659,0.041,2.486-0.019 c0.417-0.028,1.118,0.325,1.14-0.545c0.014-0.637-0.156-1.279-0.873-1.367c-1.919-0.241-3.858-0.233-5.774,0.019 c-0.465,0.062-0.998,0.442-0.832,1.069C12.715,32.602,13.045,32.977,13.676,32.955z M14.108,29.013 c1.47-0.007,2.96-0.122,4.414,0.035c1.792,0.192,3.1-0.412,4.273-2.105c-3.044,0-5.882,0.014-8.719-0.01 c-0.768-0.005-1.495,0.118-1.461,1C12.642,28.731,13.329,29.014,14.108,29.013z M23.678,36.593c-0.666-0.69-1.258-1.497-2.483-1.448 c-2.341,0.095-4.689,0.051-7.035,0.012c-0.834-0.014-1.599,0.177-1.569,1.066c0.031,0.854,0.812,1.062,1.636,1.043 c1.425-0.033,2.852-0.01,4.278-0.01v-0.01c1.562,0,3.126,0.008,4.691-0.005C23.614,37.239,24.233,37.174,23.678,36.593z  M32.234,42.292h-0.002c-1.075,0.793-2.589,0.345-3.821,1.048c-0.359,0.193-0.663,0.465-0.899,0.799 c-1.068,1.623-2.052,3.301-3.117,4.928c-0.625,0.961-0.386,1.805,0.409,2.395c0.844,0.628,1.874,0.617,2.548-0.299 c1.912-2.573,3.761-5.197,5.621-7.814C33.484,42.619,33.032,42.387,32.234,42.292z M43.527,28.401 c-0.688-1.575-2.012-0.831-3.121-0.895c-1.047-0.058-2.119,1.128-3.002,0.345c-0.768-0.677-1.213-1.804-1.562-2.813 c-0.45-1.305-1.495-2.225-2.329-3.583c2.953,1.139,4.729,0.077,5.592-1.322c0.99-1.61,0.718-3.725-0.627-4.967 c-1.362-1.255-3.414-1.445-4.927-0.452c-1.933,1.268-2.206,2.893-0.899,6.11c-2.098-0.659-3.835-1.654-5.682-2.383 c-0.735-0.291-1.437-1.017-2.293-0.666c-2.263,0.927-4.522,1.885-6.723,2.95c-1.357,0.658-1.649,1.593-1.076,2.638 c0.462,0.851,1.643,1.126,2.806,0.617c0.993-0.433,1.994-0.857,2.951-1.374c1.599-0.86,3.044-0.873,4.604,0.214 c1.017,0.707,0.873,1.137,0.123,1.849c-1.701,1.615-3.516,3.12-4.933,5.006c-1.042,1.388-0.993,2.817,0.255,4.011 c1.538,1.471,3.148,2.869,4.708,4.315c0.485,0.444,0.907,0.896-0.227,1.104c-1.523,0.285-3.021,0.694-4.538,1.006 c-1.109,0.225-2.02,1.259-1.83,2.16c0.223,1.07,1.548,1.756,2.687,1.487c3.003-0.712,6.008-1.413,9.032-2.044 c1.549-0.324,2.273-1.869,1.344-3.115c-0.868-1.156-1.801-2.267-2.639-3.445c-1.964-2.762-1.95-2.771,0.528-5.189 c1.394-1.357,1.379-1.351,2.437,0.417c0.461,0.769,0.854,1.703,1.99,1.613c2.238-0.181,4.407-0.755,6.564-1.331 C43.557,30.447,43.88,29.206,43.527,28.401z',
                 'walk': 'path://M29.902,23.275c1.86,0,3.368-1.506,3.368-3.365c0-1.859-1.508-3.365-3.368-3.365 c-1.857,0-3.365,1.506-3.365,3.365C26.537,21.769,28.045,23.275,29.902,23.275z M36.867,30.74c-1.666-0.467-3.799-1.6-4.732-4.199 c-0.932-2.6-3.131-2.998-4.797-2.998s-7.098,3.894-7.098,3.894c-1.133,1.001-2.1,6.502-0.967,6.769 c1.133,0.269,1.266-1.533,1.934-3.599c0.666-2.065,3.797-3.466,3.797-3.466s0.201,2.467-0.398,3.866 c-0.599,1.399-1.133,2.866-1.467,6.198s-1.6,3.665-3.799,6.266c-2.199,2.598-0.6,3.797,0.398,3.664 c1.002-0.133,5.865-5.598,6.398-6.998c0.533-1.397,0.668-3.732,0.668-3.732s0,0,2.199,1.867c2.199,1.865,2.332,4.6,2.998,7.73 s2.332,0.934,2.332-0.467c0-1.401,0.269-5.465-1-7.064c-1.265-1.6-3.73-3.465-3.73-5.265s1.199-3.732,1.199-3.732 c0.332,1.667,3.335,3.065,5.599,3.399C38.668,33.206,38.533,31.207,36.867,30.74z'}
 
-
-
 symbol_list = list(symbol_dict.values())
 
-
-@C.funcs
-def geo_base() -> Geo:
-    c = (
-        Geo()
-        .add_schema(maptype="china")
-        .add("geo", [list(z) for z in zip(Faker.provinces, Faker.values())])
-        .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
-        .set_global_opts(
-            visualmap_opts=opts.VisualMapOpts(),
-            title_opts=opts.TitleOpts(title="Geo-基本示例"),
-        )
-    )
-    return c
-
-
-@C.funcs
-def geo_visualmap_piecewise() -> Geo:
-    c = (
-        Geo()
-        .add_schema(maptype="china")
-        .add("geo", [list(z) for z in zip(Faker.provinces, Faker.values())])
-        .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
-        .set_global_opts(
-            visualmap_opts=opts.VisualMapOpts(is_piecewise=True),
-            title_opts=opts.TitleOpts(title="Geo-VisualMap（分段型）"),
-        )
-    )
-    return c
-
-
-@C.funcs
-def geo_effectscatter() -> Geo:
-    c = (
-        Geo()
-        .add_schema(maptype="china")
-        .add(
-            "geo",
-            [list(z) for z in zip(Faker.provinces, Faker.values())],
-            type_=ChartType.EFFECT_SCATTER,
-        )
-        .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
-        .set_global_opts(title_opts=opts.TitleOpts(title="Geo-EffectScatter"))
-    )
-    return c
-
-
-@C.funcs
-def geo_heatmap() -> Geo:
-    c = (
-        Geo()
-        .add_schema(maptype="china")
-        .add(
-            "geo",
-            [list(z) for z in zip(Faker.provinces, Faker.values())],
-            type_=ChartType.HEATMAP,
-        )
-        .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
-        .set_global_opts(
-            visualmap_opts=opts.VisualMapOpts(),
-            title_opts=opts.TitleOpts(title="Geo-HeatMap"),
-        )
-    )
-    return c
-
-
-@C.funcs
-def geo_guangdong() -> Geo:
-    c = (
-        Geo()
-        .add_schema(maptype="广东")
-        .add(
-            "geo",
-            [list(z) for z in zip(Faker.guangdong_city, Faker.values())],
-            type_=ChartType.HEATMAP,
-        )
-        .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
-        .set_global_opts(
-            visualmap_opts=opts.VisualMapOpts(),
-            title_opts=opts.TitleOpts(title="Geo-广东地图"),
-        )
-    )
-    return c
-
-
-@C.funcs
 def geo_lines() -> Geo:
     c = (
         Geo()
         .add_schema(maptype="china")
         .add(
             "",
-            [("北京", 1), ("重庆", 2), ("长沙", 3), ("长春", 4), ("成都", 5), ("大连", 6), ("广州", 7), ("贵阳", 8),
-            ("合肥", 9), ("杭州", 10), ("哈尔滨", 11), ("海口", 12), ("济南", 13), ("昆明", 14), ("柳州", 15), ("绵阳", 16),
-            ("潞西市", 17), ("南宁", 18), ("南京", 19), ("沈阳", 20), ("三亚", 21), ("上海", 22), ("天津", 23), ("徐州", 24),
-            ("义乌", 25), ("郑州", 26), ("张家界", 27)],
+            [("北京", 4), ("重庆", 14), ("长沙", 7), ("长春", 1), ("成都", 11), ("大连", 1), ("广州", 2), ("贵阳", 5),
+            ("合肥", 1), ("杭州", 1), ("哈尔滨", 5), ("海口", 6), ("济南", 8), ("昆明", 6), ("柳州", 1), ("绵阳", 1),
+            ("潞西市", 1), ("南宁", 2), ("南京", 2), ("沈阳", 1), ("上海", 6), ("天津", 1), ("徐州", 1),
+            ("义乌", 3), ("郑州", 2), ("张家界", 1), ("西安", 1), ("湛江", 1)],
             type_=ChartType.EFFECT_SCATTER,
             color="#ffa022"
         )
@@ -128,12 +37,12 @@ def geo_lines() -> Geo:
             [("揭阳", "北京"), ("揭阳", "重庆"), ("揭阳", "长沙"), ("揭阳", "长春"), ("揭阳", "成都"),
             ("揭阳", "大连"), ("揭阳", "广州"), ("揭阳", "贵阳"), ("揭阳", "合肥"), ("揭阳", "杭州"),
             ("揭阳", "哈尔滨"), ("揭阳", "海口"), ("揭阳", "济南"), ("揭阳", "昆明"), ("揭阳", "柳州"),
-            ("揭阳", "绵阳"), ("揭阳", "潞西市"), ("揭阳", "南宁"), ("揭阳", "南京"), ("揭阳", "沈阳"),("揭阳", "三亚"),
-            ("揭阳", "上海"), ("揭阳", "天津"), ("揭阳", "徐州"),("揭阳", "义乌"),("揭阳", "郑州"), ("揭阳", "张家界")],
+            ("揭阳", "绵阳"), ("揭阳", "潞西市"), ("揭阳", "南宁"), ("揭阳", "南京"), ("揭阳", "沈阳"),
+            ("揭阳", "上海"), ("揭阳", "天津"), ("揭阳", "徐州"),("揭阳", "义乌"),
+            ("揭阳", "郑州"), ("揭阳", "张家界"), ("揭阳", "西安"), ("揭阳", "湛江")],
             type_=ChartType.LINES,
             effect_opts=opts.EffectOpts(
                 symbol=symbol_list[0], symbol_size=15, color='#a6c84c', period=6, trail_length=0, is_show=True
-                # 特效图形的标记。有 RECT', 'DIAMOND', 'ARROW' 可选
             ),
             linestyle_opts=opts.LineStyleOpts(curve=0.2, color='#46bee9', width=1, opacity=0.5),
         )
@@ -144,34 +53,4 @@ def geo_lines() -> Geo:
         )
     return c
 
-
-@C.funcs
-def geo_lines_background() -> Geo:
-    c = (
-        Geo()
-        .add_schema(
-            maptype="china",
-            itemstyle_opts=opts.ItemStyleOpts(color="#323c48", border_color="#111"),
-        )
-        .add(
-            "",
-            [("广州", 55), ("北京", 66), ("杭州", 77), ("重庆", 88)],
-            type_=ChartType.EFFECT_SCATTER,
-            color="white",
-        )
-        .add(
-            "geo",
-            [("广州", "上海"), ("广州", "北京"), ("广州", "杭州"), ("广州", "重庆")],
-            type_=ChartType.LINES,
-            effect_opts=opts.EffectOpts(
-                symbol=SymbolType.ARROW, symbol_size=6, color="blue"
-            ),
-            linestyle_opts=opts.LineStyleOpts(curve=0.2),
-        )
-        .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
-        .set_global_opts(title_opts=opts.TitleOpts(title="Geo-Lines-background"))
-    )
-    return c
-
-
-Page().add(*[fn() for fn, _ in C.charts]).render('航线.html')
+geo_lines().render('揭阳航线.html')
