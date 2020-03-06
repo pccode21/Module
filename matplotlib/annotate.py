@@ -3,6 +3,7 @@ import matplotlib
 import numpy as np
 import os
 import matplotlib.path as mpath
+import matplotlib.image as mpimg
 
 os.chdir(r'.\Module\matplotlib')  # 创建工作路径
 
@@ -12,7 +13,13 @@ matplotlib.rc('font', **font)
 x = np.linspace(-3, 3, 50)  # 使用np.linspace定义x：范围是(-3,3);个数是50.
 y1 = 2 * x + 1
 y2 = x ** 2
-plt.figure(num=1, figsize=(8, 5))  # 使用plt.figure定义一个图像窗口：编号为1；大小为(8, 5)
+left, bottom, width, height = 0.1, 0.2, 0.8, 0.6
+"""
+确定大图左下角的位置以及宽高
+注意，4个值都是占整个figure坐标系的百分比。
+在这里，假设figure的大小是10x10，那么大图就被包含在由(1, 1)开始，宽8，高8的坐标系内。
+"""
+plt.figure(num=1, figsize=(8, 6)).add_axes([left, bottom, width, height])  # 使用plt.figure定义一个图像窗口：编号为1；大小为(8, 5)
 # set x limits
 plt.xlim((-1, 2))
 plt.ylim((-2, 3))
@@ -64,6 +71,13 @@ plt.text(-1, 2, r'$This\ is\ the\ some\ text. \mu\ \sigma_i\ \alpha_t$',
         fontdict={'size': 9, 'color': 'red'})
 # 其中-1, 2,是选取text的开始位置, 空格需要用到转字符\ ,fontdict设置文本字体.
 plt.title("函数图", fontsize=14, loc='center')  # 设置标题
+# 插入小图，注意坐标系位置和大小的改变
+left, bottom, width, height = 0.9, 0.1, 0.1, 0.1
+ax2 = plt.figure(num=1).add_axes([left, bottom, width, height])  # 这里的 num 值要跟大图一致
+# fig, ax = plt.subplots(1, 1, figsize=(1, 1))
+image = mpimg.imread('LOGO.ico')
+ax2.imshow(image)
+ax2.axis('off')
 thismanager = plt.get_current_fig_manager()
 thismanager.window.wm_iconbitmap('LOGO.ico')
 thismanager.canvas.set_window_title('数能工作室制作')
