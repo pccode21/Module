@@ -5,7 +5,6 @@ import re
 import os
 import matplotlib
 import matplotlib.pyplot as plt
-import numpy as np
 import matplotlib as mpl
 
 os.chdir(r'.\Module\beautifulsoup')
@@ -22,8 +21,8 @@ print(tr_list)
 soup.font.decompose()  # Tag.decompose() 方法将当前节点移除文档树并完全销毁，在这里是移除<font color="blue">(初盘)</font>
 print(tr_list)
 date_time = []  # 全部时间
-let_ball = []  #全部让球盘
-water_level = []  #全部水位
+let_ball = []  # 全部让球盘
+water_level = []  # 全部水位
 change_let_ball = []  # 变化让球盘
 change_time = []  # 变化时间点
 change_water_level = []  # 变化水位点
@@ -36,11 +35,11 @@ for tr in tr_list:
     """按照CSS类名搜索tag的功能非常实用,但标识CSS类名的关键字 class 在Python中是保留字,使用 class 做参数会导致语法错误.
     从Beautiful Soup的4.1.1版本开始,可以通过 class_ 参数搜索有指定CSS类名的tag"""
     water_level.append(level.text.replace('\xa0', ''))  # \xa0 是不间断空白符 &nbsp;要使用replace替换掉
-    if tm != None:
+    if tm is not None:
         date_time.append(tm.text)
-    if pk != None:
+    if pk is not None:
         let_ball.append(pk.text)
-    if tm1 != None:
+    if tm1 is not None:
         change_pk = tm1.next_sibling  # 在文档树中,使用 .next_sibling 和 .previous_sibling 属性来查询兄弟节点:
         change_level = change_pk.next_sibling
         change_let_ball.append(change_pk.text)
@@ -53,27 +52,41 @@ let_ball = let_ball[::-1]
 change_time = change_time[::-1]
 change_let_ball = change_let_ball[::-1]
 change_water_level = change_water_level[::-1]
+# ball_c = ['三球', '两球半/三球', '两球半', '两球/两球半', '两球', '球半/两球', '球半', '一球/球半', '一球', '半球/一球', '半球', '平半/半球', '平手']
+# ball_n = [3, 2.75, 2.5, 2.25, 2, 1.75, 1.5, 1.25, 1, 0.75, 0.5, 0.25, 0]
+let_ball1 = ['0.75' if w == '半球/一球' else w for w in let_ball]
+let_ball_n = ['0.5' if w == '半球' else w for w in let_ball1]
+change_let_ball1 = ['0.75' if w == '半球/一球' else w for w in change_let_ball]
+change_let_ball_n = ['0.5' if w == '半球' else w for w in change_let_ball1]
+change_water_level_s = list(set(change_water_level))  # 列出原有列表中的不同值
+change_water_level_s = list(map(float, change_water_level_s))  # 将列表中的字符串转为数字
+change_water_level_s = sorted(change_water_level_s, key=float)  # key参数需要一个函数，该函数将在使用转换值进行排序之前转换值，但保留原始值
 print(water_level)
 print(date_time)
 print(let_ball)
+print(let_ball_n)
 print(change_time)
 print(change_let_ball)
 print(change_water_level)
+print(change_let_ball_n)
+print(change_water_level_s)
 data_dict = {
             'date_time': date_time,
             'let_ball': let_ball,
+            'let_ball_n': let_ball_n,
             'water_level': water_level
             }
 change_data_dict = {
                     'change_time': change_time,
                     'change_let_ball': change_let_ball,
+                    'change_let_ball_n': change_let_ball_n,
                     'change_water_level': change_water_level
                     }
 datas = pd.DataFrame(data_dict)
 change_datas = pd.DataFrame(change_data_dict)
 print(change_datas)
-#datas.to_csv('2019-2020切尔西vs埃弗顿29.csv')
-#change_datas.to_csv('2019-2020切尔西vs埃弗顿29（盘口变化）.csv' )
+# datas.to_csv('2019-2020切尔西vs埃弗顿29.csv')
+# change_datas.to_csv('2019-2020切尔西vs埃弗顿29（盘口变化）.csv' )
 font = {'family': 'Microsoft Yahei', 'size': '8'}  # 设置才可以正常现在中文
 matplotlib.rc('font', **font)
 fig = plt.figure(num=1, figsize=(8, 6))
@@ -83,14 +96,17 @@ ax = plt.gca()  # 使用plt.gca获取当前坐标轴信息
 ax.spines['right'].set_color('none')  # 使用.spines设置边框
 ax.spines['top'].set_color('none')
 ax.xaxis.set_major_locator(mpl.ticker.LinearLocator(20))  # 设置x轴显示多少个日期刻度
-#ax.xaxis.set_major_locator(mpl.ticker.MultipleLocator(140))  # 设定坐标轴的显示的刻度间隔
+# ax.xaxis.set_major_locator(mpl.ticker.MultipleLocator(140))  # 设定坐标轴的显示的刻度间隔
 fig.autofmt_xdate(rotation=45)  # 防止x轴上的数据重叠，自动调整,并且45度倾斜
 plt.xlabel('日期-时间', fontsize=9)
 plt.ylabel('让球水位', fontsize=9)
 plt.grid(linestyle='dotted')
 # linestyle values are '-', '--', '-.', ':', 'None', ' ', '', 'solid', 'dashed', 'dashdot', 'dotted'
 plt.axhline(y=max(water_level), color='green', linestyle='dotted', lw=1)  # 添加水平参考线
-plt.text(max(date_time), max(water_level), r'$▲0.5$', fontdict={'size': 9, 'color': 'red'})
-plt.text(max(date_time), max(water_level), r'$▼0.75$', fontdict={'size': 9, 'color': 'red'})
+plt.text(max(date_time), max(water_level), r'$▼0.75\ ▲0.5$', fontdict={'size': 9, 'color': 'red'})
+plt.title("2019-2020年 切尔西vs埃弗顿 29轮 赛前盘口走势图", fontsize=14, loc='center')  # 设置标题
 plt.savefig('2019-2020切尔西vs埃弗顿29.png')
+thismanager = plt.get_current_fig_manager()
+thismanager.window.wm_iconbitmap('LOGO.ico')
+thismanager.canvas.set_window_title('数能工作室制作')
 plt.show()
