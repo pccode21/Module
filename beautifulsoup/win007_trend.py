@@ -5,7 +5,6 @@ import re
 import os
 import matplotlib
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 
 os.chdir(r'.\Module\beautifulsoup')
 
@@ -45,6 +44,8 @@ for tr in tr_list:
         change_let_ball.append(change_pk.text)
         change_water_level.append(change_level.text.replace('\xa0', ''))
         change_time.append(tm1.text)
+water_level = list(map(float, water_level))  # 将列表中的字符串转为数字
+change_water_level = list(map(float, change_water_level))
 water_level = water_level[::-1]  # 反转列表使用[::-1]
 # water_level = ['0.95' if w=='0.95(初盘)' else w for w in water_level]  # 将'0.95(初盘)'替换成'0.95'
 date_time = date_time[::-1]
@@ -59,8 +60,10 @@ let_ball_n = ['0.5' if w == '半球' else w for w in let_ball1]
 change_let_ball1 = ['0.75' if w == '半球/一球' else w for w in change_let_ball]
 change_let_ball_n = ['0.5' if w == '半球' else w for w in change_let_ball1]
 change_water_level_s = list(set(change_water_level))  # 列出原有列表中的不同值
-change_water_level_s = list(map(float, change_water_level_s))  # 将列表中的字符串转为数字
-change_water_level_s = sorted(change_water_level_s, key=float)  # key参数需要一个函数，该函数将在使用转换值进行排序之前转换值，但保留原始值
+change_water_level_s = sorted(change_water_level_s, key=float)
+# 对列表中的数字进行排序，key参数需要一个函数，该函数将在使用转换值进行排序之前转换值，但保留原始值
+let_ball_n = list(map(float, let_ball_n))
+change_let_ball_n = list(map(float, change_let_ball_n))
 print(water_level)
 print(date_time)
 print(let_ball)
@@ -87,24 +90,30 @@ change_datas = pd.DataFrame(change_data_dict)
 print(change_datas)
 # datas.to_csv('2019-2020切尔西vs埃弗顿29.csv')
 # change_datas.to_csv('2019-2020切尔西vs埃弗顿29（盘口变化）.csv' )
-font = {'family': 'Microsoft Yahei', 'size': '8'}  # 设置才可以正常现在中文
-matplotlib.rc('font', **font)
-fig = plt.figure(num=1, figsize=(8, 6))
-plt.plot(change_time, change_water_level, label='2019-2020赛季 切尔西vs埃弗顿 第29轮 盘口走势图',
-        marker='o', markersize=3, color='red', alpha=0.5, markeredgecolor='black', markerfacecolor='red')
+plt.rcParams['font.sans-serif'] = ['SimHei'] # 用来正常显示中文标签
+plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
+plt.figure(num=1, figsize=(12, 8))
+plt.plot(change_time, change_water_level, marker='o', markersize=3, color='gray', alpha=0.5, markeredgecolor='black', markerfacecolor='red')
+plt.yticks(ticks=change_water_level_s, fontproperties='Times New Roman', size=9)  # 设置y轴显示的内容
+for t, w, b in zip(change_time, change_water_level, change_let_ball_n):
+        plt.annotate('%s' % b, xy=(t, w), xytext=(-4,-8), textcoords = 'offset points', fontsize=6, color='r')
 ax = plt.gca()  # 使用plt.gca获取当前坐标轴信息
 ax.spines['right'].set_color('none')  # 使用.spines设置边框
 ax.spines['top'].set_color('none')
-ax.xaxis.set_major_locator(mpl.ticker.LinearLocator(20))  # 设置x轴显示多少个日期刻度
-# ax.xaxis.set_major_locator(mpl.ticker.MultipleLocator(140))  # 设定坐标轴的显示的刻度间隔
-fig.autofmt_xdate(rotation=45)  # 防止x轴上的数据重叠，自动调整,并且45度倾斜
-plt.xlabel('日期-时间', fontsize=9)
-plt.ylabel('让球水位', fontsize=9)
+#ax.yaxis.set_major_locator(plt.LinearLocator(len(change_water_level_s)))  # 设置y轴显示多少个数字刻度
+ax.yaxis.set_major_formatter(plt.FormatStrFormatter('%1.2f'))  # 设置y轴标签文本的格式
+ax.xaxis.set_major_locator(plt.LinearLocator(20))  # 设置x轴显示多少个日期刻度
+# ax.xaxis.set_major_locator(plt.MultipleLocator(140))  # 设定坐标轴的显示的刻度间隔
+plt.gcf().autofmt_xdate(rotation=45)  # 防止x轴上的数据重叠，自动调整,并且45度倾斜
+# 当前的图表和子图可以使用plt.gcf()和plt.gca()获得，分别表示Get Current Figure和Get Current Axes。
+plt.xticks(fontproperties='Times New Roman', size=9)  #设置X轴刻度字体和大小
+plt.xlabel('日期-时间', fontsize=10)
+plt.ylabel('让球水位', fontsize=10)
 plt.grid(linestyle='dotted')
 # linestyle values are '-', '--', '-.', ':', 'None', ' ', '', 'solid', 'dashed', 'dashdot', 'dotted'
-plt.axhline(y=max(water_level), color='green', linestyle='dotted', lw=1)  # 添加水平参考线
-plt.text(max(date_time), max(water_level), r'$▼0.75\ ▲0.5$', fontdict={'size': 9, 'color': 'red'})
-plt.title("2019-2020年 切尔西vs埃弗顿 29轮 赛前盘口走势图", fontsize=14, loc='center')  # 设置标题
+# plt.axhline(y=max(water_level), color='green', linestyle='dotted', lw=1)  # 添加水平参考线
+# plt.text(max(date_time), max(water_level), r'▼半一 ▲半球', fontdict={'size': 9, 'color': 'red'})
+plt.title("2019-2020赛季 切尔西vs埃弗顿 29轮 赛前盘口走势图", fontsize=14, loc='center')  # 设置标题
 plt.savefig('2019-2020切尔西vs埃弗顿29.png')
 thismanager = plt.get_current_fig_manager()
 thismanager.window.wm_iconbitmap('LOGO.ico')
