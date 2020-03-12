@@ -90,23 +90,23 @@ change_datas = pd.DataFrame(change_data_dict)
 print(change_datas)
 # datas.to_csv('2019-2020切尔西vs埃弗顿29.csv')
 # change_datas.to_csv('2019-2020切尔西vs埃弗顿29（盘口变化）.csv' )
-plt.rcParams['font.sans-serif'] = ['SimHei'] # 用来正常显示中文标签
-plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
+plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
+plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
 plt.figure(num=1, figsize=(12, 8))
 plt.plot(change_time, change_water_level, marker='o', markersize=3, color='gray', alpha=0.5, markeredgecolor='black', markerfacecolor='red')
 plt.yticks(ticks=change_water_level_s, fontproperties='Times New Roman', size=9)  # 设置y轴显示的内容
 for t, w, b in zip(change_time, change_water_level, change_let_ball_n):
-        plt.annotate('%s' % b, xy=(t, w), xytext=(-4,-8), textcoords = 'offset points', fontsize=6, color='r')
+        plt.annotate('%s' % b, xy=(t, w), xytext=(-4, -8), textcoords = 'offset points', fontsize=6, color='r')
 ax = plt.gca()  # 使用plt.gca获取当前坐标轴信息
 ax.spines['right'].set_color('none')  # 使用.spines设置边框
 ax.spines['top'].set_color('none')
-#ax.yaxis.set_major_locator(plt.LinearLocator(len(change_water_level_s)))  # 设置y轴显示多少个数字刻度
+# ax.yaxis.set_major_locator(plt.LinearLocator(len(change_water_level_s)))  # 设置y轴显示多少个数字刻度
 ax.yaxis.set_major_formatter(plt.FormatStrFormatter('%1.2f'))  # 设置y轴标签文本的格式
 ax.xaxis.set_major_locator(plt.LinearLocator(20))  # 设置x轴显示多少个日期刻度
 # ax.xaxis.set_major_locator(plt.MultipleLocator(140))  # 设定坐标轴的显示的刻度间隔
 plt.gcf().autofmt_xdate(rotation=45)  # 防止x轴上的数据重叠，自动调整,并且45度倾斜
 # 当前的图表和子图可以使用plt.gcf()和plt.gca()获得，分别表示Get Current Figure和Get Current Axes。
-plt.xticks(fontproperties='Times New Roman', size=9)  #设置X轴刻度字体和大小
+plt.xticks(fontproperties='Times New Roman', size=9)  # 设置X轴刻度字体和大小
 plt.xlabel('日期-时间', fontsize=10)
 plt.ylabel('让球水位', fontsize=10)
 plt.grid(linestyle='dotted')
