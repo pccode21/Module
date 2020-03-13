@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import re
 import os
-import matplotlib
 import matplotlib.pyplot as plt
 
 os.chdir(r'.\Module\beautifulsoup')
@@ -53,12 +52,19 @@ let_ball = let_ball[::-1]
 change_time = change_time[::-1]
 change_let_ball = change_let_ball[::-1]
 change_water_level = change_water_level[::-1]
-# ball_c = ['三球', '两球半/三球', '两球半', '两球/两球半', '两球', '球半/两球', '球半', '一球/球半', '一球', '半球/一球', '半球', '平半/半球', '平手']
-# ball_n = [3, 2.75, 2.5, 2.25, 2, 1.75, 1.5, 1.25, 1, 0.75, 0.5, 0.25, 0]
-let_ball1 = ['0.75' if w == '半球/一球' else w for w in let_ball]
-let_ball_n = ['0.5' if w == '半球' else w for w in let_ball1]
-change_let_ball1 = ['0.75' if w == '半球/一球' else w for w in change_let_ball]
-change_let_ball_n = ['0.5' if w == '半球' else w for w in change_let_ball1]
+ball_c = ['三球', '两球半/三球', '两球半', '两球/两球半', '两球', '球半/两球', '球半', '一球/球半', '一球', '半球/一球', '半球', '平半/半球', '平手',
+            '受让平手/半球', '受让半球', '受让半球/一球','受让一球']
+ball_n = [3, 2.75, 2.5, 2.25, 2, 1.75, 1.5, 1.25, 1, 0.75, 0.5, 0.25, 0, -0.25, -0.5, -0.75, -1]
+let_ball_n = []
+for i in range(0, len(let_ball)):  # 将 let_ball 中的中文字符串（'半球/一球'等）转换为数字（0.75等）
+    for j in range(0, len(ball_c)):
+        if let_ball[i] == ball_c[j]:
+            let_ball_n.append(ball_n[j])
+change_let_ball_n = []
+for i in range(0, len(change_let_ball)):  # 将 change_let_ball 中的中文字符串（'半球/一球'等）转换为数字（0.75等）
+    for j in range(0, len(ball_c)):
+        if change_let_ball[i] == ball_c[j]:
+            change_let_ball_n.append(ball_n[j])
 change_water_level_s = list(set(change_water_level))  # 列出原有列表中的不同值
 change_water_level_s = sorted(change_water_level_s, key=float)
 # 对列表中的数字进行排序，key参数需要一个函数，该函数将在使用转换值进行排序之前转换值，但保留原始值
@@ -88,8 +94,8 @@ change_data_dict = {
 datas = pd.DataFrame(data_dict)
 change_datas = pd.DataFrame(change_data_dict)
 print(change_datas)
-# datas.to_csv('2019-2020切尔西vs埃弗顿29.csv')
-# change_datas.to_csv('2019-2020切尔西vs埃弗顿29（盘口变化）.csv' )
+datas.to_csv('2019-2020切尔西vs埃弗顿29.csv')
+change_datas.to_csv('2019-2020切尔西vs埃弗顿29（盘口变化）.csv')
 plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
 plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
 plt.figure(num=1, figsize=(12, 8))
