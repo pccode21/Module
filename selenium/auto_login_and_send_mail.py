@@ -15,7 +15,7 @@ def login():
     login_btn = driver.find_element_by_id('login_button')  # 找到登陆按钮
     login_btn.click()  # 点击登陆按钮
     print("登录成功")
-    time.sleep(5)  # 等待10秒看是否登陆成功
+    time.sleep(3)  # 等待10秒看是否登陆成功
     driver.switch_to.default_content()  # 离开login_frame
     time.sleep(1)
     w_mail_btn = driver.find_element_by_id('composebtn')  # 定位写信按钮
@@ -29,7 +29,7 @@ def login():
     driver.find_element_by_xpath('/html/body').send_keys('您好！来着16007005的问候！','\n数能工作室')
     driver.switch_to.parent_frame()  # 返回到mainframe
     driver.find_element_by_name('sendbtn').click()  # 定位发送按钮
-    time.sleep(5)
+    time.sleep(3)
 
 
 if __name__ == '__main__':
