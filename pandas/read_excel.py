@@ -12,19 +12,13 @@ def excel_one_line_to_list():  # 读取excel一列或者多列保存为列表
     for list1 in df1_list:
         result.append(list1[0])
     del result[-3:]  # 删除列表最后的3个 nan
-    # 以下是去掉列表中重复的字符串的操作
-    last = result[-1]  # 取出列表中的最后一个数
-    for i in range(len(result)-2, -1, -1):
-    # 在这里，len(List)-2是指列表中的倒数第二个数，-1是指列表中的第一个数，步长是-1表示列表从后往前扫描
-    # range(start, stop[, step])
-    # start: 计数从 start 开始。默认是从 0 开始。
-    # stop: 计数到 stop 结束，但不包括 stop
-    # step：步长，默认为1
-        if last == result[i]:
-            del result[i]
-            # print(result[i])
-        else:
-            last = result[i]
+    print(result, '\n', len(result))
+    result = list(dict.fromkeys(result))
+    """
+    从列表中删除重复项
+    使用“列表”项作为键来创建字典。这将自动删除所有重复项，因为字典不能具有重复键
+    然后，将字典转换回列表
+    """
     print(result, '\n', len(result))
     return index1, result
 
