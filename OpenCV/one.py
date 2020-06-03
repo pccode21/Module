@@ -57,7 +57,7 @@ cv.waitKey() 是一个键盘绑定函数。其参数是以毫秒为单位的时�
 # 这是因为对于 OpenCV 的像素是 BGR 顺序，然而 Matplotlib 所遵循的是 RGB 顺序。
 # 有三种方法可以完成 BGR 至 RGB 的转换
 b, g, r = cv.split(img)
-img2 = cv.merge([r, g, b])
+img2 = cv.merge([r, g, b])  # 使用函数 merge()合并图像通道
 """
 还有以下两种方式可以修改：
 img3=img[:,:,::-1]
