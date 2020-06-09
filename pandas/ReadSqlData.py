@@ -4,7 +4,7 @@ import pymysql
 conn = pymysql.connect(host='localhost',
                        port=3306,
                        user='root',
-                       password='Lxd05230708',
+                       password='admin',
                        database='spider',
                        charset='utf8mb4')
 sql = 'select * from football_player'
