@@ -4,6 +4,7 @@ https://blog.csdn.net/stone0823/article/details/100008619
 import pandas as pd
 import numpy as np
 import datetime as dt
+import string
 
 matrix = [
     [1,2,3],
@@ -28,3 +29,11 @@ df5 = pd.DataFrame(wbs)
 elapsed= df5['date_to'].apply(pd.to_datetime) - df5['date_from'].apply(pd.to_datetime)
 df5['elapsed'] = elapsed.apply(lambda x : x.days)
 print(df5)
+
+"""
+使用 pandas 的 apply 函数，合并多行为一行
+将 “序号” 相同的行的 “值”，使用逗号进行连接
+"""
+data = pd.DataFrame({"序号": [1, 1, 3, 4, 1, 3, 3, 2, 3, 4],\
+                     "值": list(string.ascii_uppercase[:10])})  # ascii_lowercase 为小写字母
+data.groupby("序号").apply(lambda x: ",".join(x["值"]))
